@@ -1,0 +1,208 @@
+{
+    "name" : "加油省车主",
+    "appid" : "__UNI__FB3E0A1",
+    "description" : "加油省车主",
+    "versionName" : "2.0.2",
+    "versionCode" : 3,
+    "transformPx" : false,
+    "app-plus" : {
+        // APP-VUE分包，可提APP升启动速度，2.7.12开始支持，兼容微信小程序分包方案，默认关闭
+        "optimization" : {
+            "subPackages" : true
+        },
+        "safearea" : {
+            "bottom" : {
+                "offset" : "none"
+            }
+        },
+        "splashscreen" : {
+            "alwaysShowBeforeRender" : true,
+            "waiting" : true,
+            "autoclose" : true,
+            "delay" : 0
+        },
+        "usingComponents" : true,
+        "nvueCompiler" : "uni-app",
+        "compilerVersion" : 3,
+        "modules" : {
+            "OAuth" : {},
+            "Share" : {},
+            "Payment" : {},
+            "Maps" : {},
+            "Geolocation" : {}
+        },
+        "distribute" : {
+            "android" : {
+                // "permissions" : [
+                //     "<uses-feature android:name=\"android.hardware.camera\"/>",
+                //     "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+                //     "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+                //     "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+                //     "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+                //     "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+                //     "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+                //     "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+                //     "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+                //     "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+                //     "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                //     "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+                //     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+                //     "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+                //     "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                //     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+                //     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+                //     "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+                //     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+                // ],
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a" ],
+                "schemes" : "youkascz",
+                "autoSdkPermissions" : false,
+                "permissionExternalStorage" : {
+                    "request" : "none",
+                    "prompt" : "应用保存运行状态等信息，需要获取读写手机存储（系统提示为访问设备上的照片、媒体内容和文件）权限，请允许。"
+                },
+                "permissionPhoneState" : {
+                    "request" : "none",
+                    "prompt" : "为保证您正常、安全地使用，需要获取设备识别码（部分手机提示为获取手机号码）使用权限，请允许。"
+                }
+            },
+            "ios" : {
+                "urltypes" : "applinks:com.shengchezhu",
+                "privacyDescription" : {
+                    "NSPhotoLibraryUsageDescription" : "从相册中选择照片读取照片",
+                    "NSPhotoLibraryAddUsageDescription" : "将图片保存到您的相册",
+                    "NSCameraUsageDescription" : "调用您的相机进行拍照",
+                    "NSMicrophoneUsageDescription" : "调用您的相机进行录音",
+                    "NSLocationWhenInUseUsageDescription" : "运行期间访问您的位置信息",
+                    "NSLocationAlwaysUsageDescription" : "后台运行访问您的位置信息",
+                    "NSLocationAlwaysAndWhenInUseUsageDescription" : "访问您的位置信息",
+                    "NSContactsUsageDescription" : "访问您的通讯录",
+                    "NSCalendarsUsageDescription" : "访问您的日历",
+                    "NSBluetoothPeripheralUsageDescription" : "访问您的蓝牙",
+                    "NSBluetoothAlwaysUsageDescription" : "访问您的蓝牙"
+                },
+                "idfa" : false
+            },
+            "sdkConfigs" : {
+                "ad" : {},
+                "oauth" : {
+                    "univerify" : {},
+                    "weixin" : {
+                        "appid" : "wx157fa11c8f8a504a",
+                        "appsecret" : "04f95107cc4e6ac1c2d999e6d6684e34",
+                        "UniversalLinks" : ""
+                    }
+                },
+                "payment" : {
+                    "alipay" : {
+                        "__platform__" : [ "ios", "android" ]
+                    },
+                    "weixin" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appid" : "wx157fa11c8f8a504a",
+                        "UniversalLinks" : "https://www.xingchukeji.com/app"
+                    }
+                },
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx157fa11c8f8a504a",
+                        "UniversalLinks" : "https://www.xingchukeji.com/app"
+                    }
+                },
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "f130dca27700e0f2a112f5ceb634050b",
+                        "appkey_android" : "7bdc6101d65e40402c6e80c92890ed90"
+                    }
+                },
+                "geolocation" : {
+                    "amap" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appkey_ios" : "f130dca27700e0f2a112f5ceb634050b",
+                        "appkey_android" : "7bdc6101d65e40402c6e80c92890ed90"
+                    }
+                }
+            },
+            "icons" : {
+                "android" : {
+                    "hdpi" : "unpackage/res/icons/72x72.png",
+                    "xhdpi" : "unpackage/res/icons/96x96.png",
+                    "xxhdpi" : "unpackage/res/icons/144x144.png",
+                    "xxxhdpi" : "unpackage/res/icons/192x192.png"
+                },
+                "ios" : {
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
+                    "ipad" : {
+                        "app" : "unpackage/res/icons/76x76.png",
+                        "app@2x" : "unpackage/res/icons/152x152.png",
+                        "notification" : "unpackage/res/icons/20x20.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "proapp@2x" : "unpackage/res/icons/167x167.png",
+                        "settings" : "unpackage/res/icons/29x29.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "spotlight" : "unpackage/res/icons/40x40.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png"
+                    },
+                    "iphone" : {
+                        "app@2x" : "unpackage/res/icons/120x120.png",
+                        "app@3x" : "unpackage/res/icons/180x180.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "notification@3x" : "unpackage/res/icons/60x60.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "settings@3x" : "unpackage/res/icons/87x87.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png",
+                        "spotlight@3x" : "unpackage/res/icons/120x120.png"
+                    }
+                }
+            },
+            "splashscreen" : {
+                "useOriginalMsgbox" : true
+            }
+        }
+    },
+    "quickapp" : {},
+    "mp-weixin" : {
+        "appid" : "",
+        "setting" : {
+            "urlCheck" : true,
+            "es6" : false,
+            "minified" : true,
+            "postcss" : true
+        },
+        "optimization" : {
+            "subPackages" : true
+        },
+        "usingComponents" : true
+    },
+    "mp-alipay" : {
+        "usingComponents" : true,
+        "component2" : true
+    },
+    "mp-qq" : {
+        "optimization" : {
+            "subPackages" : true
+        },
+        "appid" : ""
+    },
+    "mp-baidu" : {
+        "usingComponents" : true,
+        "appid" : ""
+    },
+    "mp-toutiao" : {
+        "usingComponents" : true,
+        "appid" : ""
+    },
+    "h5" : {
+        "template" : "template.h5.html",
+        "router" : {
+            "mode" : "hash",
+            "base" : ""
+        },
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : false
+            }
+        },
+        "title" : "加油省车主"
+    }
+}
