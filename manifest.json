@@ -90,7 +90,7 @@
                     "weixin" : {
                         "appid" : "wx157fa11c8f8a504a",
                         "appsecret" : "04f95107cc4e6ac1c2d999e6d6684e34",
-                        "UniversalLinks" : ""
+                        "UniversalLinks" : "https://www.xingchukeji.com/app"
                     }
                 },
                 "payment" : {
