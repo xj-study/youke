@@ -23,6 +23,7 @@ exports.main = async (event, context) => {
 		// console.log('success', res.result.data)
 		return res.result.data
 	} else {
+		
 		// console.log('err', res)
 		return res
 	}
