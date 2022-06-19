@@ -11,8 +11,7 @@
 					</view>
 					<view v-else @click="navigateTo('/pages/loginScreen/loginScreen')">点击登录/注册</view>
 						<view class="concat-us" @click="linkToConcat">
-							<view class="image">
-								<img src="/static/image/user/kefu.png" alt="" class='concat_image'>
+							<view class="image concat_image">
 							</view>
 							<view class="concat_text">客服</view>
 						</view>
@@ -38,11 +37,13 @@
 				</view>
 			</view>
 			<view class="banner_box">
-				<view class="bannder_item" @click="navigateTo('pages/helpScreen/helpScreen')"><img src="/static/image/user/nav1.png" alt="" class="nav_image" /></view>
-				<view class="bannder_item" @click="handleLink(AboutUrl, '关于我们')"><img src="/static/image/user/nav2.png" alt="" class="nav_image" /></view>
+				<view class="bannder_item bannder_item1" @click="navigateTo('pages/helpScreen/helpScreen')">
+					
+					</view>
+				<view class="bannder_item bannder_item2" @click="handleLink(AboutUrl, '关于我们')"></view>
 			</view>
 			<view class="add_box" @click="handleNav({ url: '/pages/oilCardCreate/oilCardCreate' })">
-				<view class="add_icon"><img src="/static/image/user/add.png" alt="" class="add_icon_img" /></view>
+				<view class="add_icon"></view>
 				<view class="add_content">
 					<view class="add_title">
 						添加油卡
@@ -415,12 +416,16 @@ export default {
 	.bannder_item {
 		width: 167 * 2rpx;
 		height: 140rpx;
-		box-shadow: inset 0px 1px 1px 0px #ebeafe;
 		border-radius: 20rpx;
 		overflow: hidden;
-		.nav_image {
-			width: 100%;
-			height: 100%;
+		&.bannder_item1{
+			background:url('/static/image/user/nav1.png') center center no-repeat;
+			background-size:100% 100%;
+		}
+		
+		&.bannder_item2{
+			background:url('/static/image/user/nav2.png') center center no-repeat;
+			background-size:100% 100%;
 		}
 	}
 }
@@ -439,10 +444,8 @@ export default {
 		height: 76rpx;
 		border-radius: 76rpx;
 		margin-right: 40rpx;
-		.add_icon_img {
-			width: 100%;
-			height: 100%;
-		}
+		background:url('/static/image/user/add.png') center center no-repeat;
+		background-size:100% 100%;
 	}
 	.add_title {
 		display: flex;
@@ -502,6 +505,8 @@ export default {
 		.concat_image{
 			width:38rpx;
 			height:40rpx;
+			background:url('/static/image/user/kefu.png') center center no-repeat;
+			background-size:100% 100%;
 		}
 		.concat_text{
 			font-size: 12px;

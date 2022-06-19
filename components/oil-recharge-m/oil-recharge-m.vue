@@ -56,9 +56,24 @@
 					</view>
 				</view>
 			</view>
+			<view style="padding: 0 30rpx;">	
+			
 			<view class="oil-list">
 				<view class="oil-list-title">选择优惠套餐
-					<!-- <text style="font-size: 24rpx;">（金额不清零 中石化中石油全国通用）</text> -->
+					<view class="oil-list-tips u-text-center" v-if="projectData.id">充值
+						<text>{{projectData.month}}</text>个月
+				<!-- 		 原价
+						<text
+							style="color: #FF5151; text-decoration: line-through;">{{amount*projectData.month}}</text>元，折扣价 -->
+						<!-- <text style="color: #FF5151;">
+							{{Math.round(amount * projectData.month * projectData.discount)}}
+						</text>元， -->
+						立省
+						<text style="color: #FF5151">
+							{{Math.round(amount * projectData.month * (1 - projectData.discount) + (couponData.discount || 0))}}
+						</text>
+						元
+					</view>
 				</view>
 				<view class="oil-list-wrap u-flex u-flex-wrap u-row-between">
 					<view
@@ -69,20 +84,29 @@
 						<view class="u-absolute oil-item-flag">活动</view>
 					</view>
 				</view>
-				<view class="oil-list-tips u-text-center" v-if="projectData.id">充值
-					<text>{{projectData.month}}</text>个月 原价
-					<text
-						style="color: #FF5151; text-decoration: line-through;">{{amount*projectData.month}}</text>元，折扣价
-					<text style="color: #FF5151;">
-						{{Math.round(amount * projectData.month * projectData.discount)}}
-					</text>元，立省
-					<text style="color: #FF5151">
-						{{Math.round(amount * projectData.month * (1 - projectData.discount) + (couponData.discount || 0))}}
-					</text>
-					元
 				</view>
 			</view>
-			<u-cell-group class="oil-cell-group" :border="false">
+			<view style="padding: 0 30rpx;">
+			<view class="item_box_wrap">
+				<view class="item_box" @click="openPlan()">
+					<view class="item_iamge plan"></view>
+					<view class="item_text">充值计划</view>
+				</view>
+				<view class="item_box" @click="selectCoupon">
+					<view class="item_iamge coupon">
+						<view class="coupon_num" v-if="couponTotal">
+						{{couponTotal}}张
+						</view>
+					</view>
+					<view class="item_text">优惠券</view>
+				</view>
+				<view class="item_box" @click="showDetail=true">
+					<view class="item_iamge detail"></view>
+					<view class="item_text">充值明细</view>
+				</view>
+			</view>
+			</view>
+			<u-cell-group class="oil-cell-group" :border="false" v-if="fasle">
 				<u-cell-item class="oil-cell-item" title="充值计划" value="查看计划" hover-class="none" bg-color="#fff"
 					:border-bottom="false" :value-style="{'color': '#333', 'fontSize': '24rpx'}"
 					:title-style="{'color': '#333', 'fontSize': '26rpx'}" @click="openPlan()">
@@ -108,14 +132,14 @@
 				<view class="oil-bottom-left u-line-1">
 					总计：
 					<text class="price">
-						￥{{Math.round(amount * projectData.month * projectData.discount - (couponData.discount || 0))}}
+						<text style="font-weight:500;font-size:12px;">￥</text>{{Math.round(amount * projectData.month * projectData.discount - (couponData.discount || 0))}}
 					</text>
-					<text style="color: #FF5151; font-size: 28rpx;">
+					<text style="color: #A0A0A0; font-size: 28rpx;">
 						（省{{Math.round(amount * projectData.month * (1 - projectData.discount) + (couponData.discount || 0))}}元）
 					</text>
 				</view>
-				<u-button :loading="isLoading" :ripple="true" @click="submit" :custom-style="{'background': '#F66866','color': '#fff', 'fontSize': '32rpx', 
-					'width': '278rpx', 'height': '120rpx', 'margin': '0', 'border': 'none', 'borderRadius': '0'}">
+				<u-button :loading="isLoading" :ripple="true" @click="submit" :custom-style="{'background': '#5874FE','color': '#fff', 'fontSize': '32rpx', 
+					'width': '240rpx', 'height': '96rpx', 'margin': '0', 'border': 'none', 'borderRadius': '60rpx'}">
 					立即充值
 				</u-button>
 			</view>
@@ -123,6 +147,17 @@
 		<u-popup v-model="show" mode="center" width="600rpx" height="800rpx" border-radius="12" :closeable="true"
 			close-icon-color="#343434" close-icon-size="28">
 			<plan-list :height='800' :list='planList' @close="show = false" />
+		</u-popup>
+		<u-popup v-model="showDetail" mode="center" width="600rpx" height="300rpx" border-radius="12" :closeable="true"
+			close-icon-color="#343434" close-icon-size="28">
+			<view class="showDetail" style="padding-top:40px;text-align: center;font-size:32rpx;margin-bottom:20px;">充值明细</view>
+			<view class="content" style="font-size:28rpx;text-align: center;">
+				总计：
+				<text>{{amount}}*{{projectData.month}}*{{projectData.discount}}
+					<text v-if="couponData.id">-{{couponData.discount}}</text> =</text>
+				<text>{{Math.round(amount * projectData.month * projectData.discount - (couponData.discount || 0))}}</text>
+				元
+			</view>
 		</u-popup>
 	</scroll-view>
 </template>
@@ -142,7 +177,8 @@
 				couponData: {},
 				show: false,
 				planList: [],
-				isLoading: false
+				isLoading: false,
+				showDetail:false,
 			};
 		},
 		props: {
@@ -347,7 +383,7 @@
 		height: 100%;
 
 		.swiper-item-wrap {
-			padding: 0 0 100rpx;
+			// padding: 0 0 100rpx;
 
 			.oil-card {
 				height: 276rpx;
@@ -416,13 +452,16 @@
 			}
 
 			.oil-list {
-				margin: 20rpx 0 17rpx;
-				padding: 24rpx;
-				background-color: #fff;
+		
+				
+				
 
 				.oil-list-title {
 					font-size: 36rpx;
 					color: #333;
+					display:flex;
+					justify-content:flex-start;
+					align-items: center;
 				}
 
 				.oil-list-wrap {
@@ -493,7 +532,7 @@
 				}
 
 				.oil-list-tips {
-					background-color: #fff;
+					// background-color: #fff;
 					font-size: 20rpx;
 					color: #3A3A3A;
 					border-radius: 25rpx;
@@ -517,6 +556,7 @@
 				background-color: #fff;
 				border-radius: 8rpx;
 				margin: 40rpx 0 0;
+				padding:16rpx 30rpx;
 
 				.oil-bottom-left {
 					padding: 0 30rpx;
@@ -524,11 +564,62 @@
 					color: #333;
 
 					.price {
-						color: #FF5151;
+						color: #5874FE;
 						font-weight: bold;
 						font-size: 36rpx;
 					}
 				}
+			}
+		}
+	}
+	.item_box_wrap{
+		width:100%;
+		height:182rpx;
+		background: #FFFFFF;
+		border-radius: 16rpx;
+		display:flex;
+		justify-content:space-between;
+		align-items: center;
+		.item_box{
+			width:33.3%;
+			text-align:center;
+			font-size: 12px;
+			font-weight: 400;
+			color: #111727;
+			line-height:34rpx;
+			.item_iamge{
+				width:60rpx;
+				height:60rpx;
+				margin:0 auto;
+				margin-bottom:14rpx;
+				position:relative;
+				&.detail{
+					background:url('/static/image/package/item3.png') center center no-repeat;
+					background-size:100% 100%;
+				}
+				&.plan{
+					background:url('/static/image/package/item1.png') center center no-repeat;
+					background-size:100% 100%;
+				}
+				&.coupon{
+					background:url('/static/image/package/item2.png') center center no-repeat;
+					background-size:100% 100%;
+				}
+				.coupon_num{
+					display:flex;
+					justify-content:center;
+					align-items: center;
+					position:absolute;
+					height:20px;
+					font-size:10px;
+					font-size:12px;
+					color:#fff;
+					padding:0 8rpx;
+					background:red;
+					border-radius:20rpx 20rpx 20rpx 0;
+						right:-100%;
+						top:-50%;
+									}
 			}
 		}
 	}
