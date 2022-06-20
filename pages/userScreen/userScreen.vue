@@ -491,7 +491,8 @@ export default {
 		.user_image{
 			width:100rpx;
 			height:100rpx;
-			background:blue;
+			background:url('/static/image/package/72.png') center center no-repeat;
+			background-size:100% 100%;
 			border-radius:100rpx;
 			margin-right:20rpx;
 		}
