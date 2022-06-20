@@ -12,46 +12,56 @@
 					<text style="color: #fff; margin: 0 16rpx; font-size: 36rpx;">添加油卡</text>
 				</view>
 			</view>
-			<swiper v-else class="oil-card" @change="changeCard">
+			<view v-else style="position:relative;">
+			<swiper  class="oil-card" @change="changeCard" style="height:140rpx;">
 				<swiper-item class="oil-card-wrap" v-for="(item, index) in cardList" :key="index">
-					<view style="height: 276rpx; background-image: url('/static/image/home-bg2.png');
-				background-size: 100% 100%; padding: 24rpx 32rpx;">
-						<view class="u-flex ">
-							<view class="u-flex-col u-row-center u-col-center">
-								<u-image height="58rpx" width='58rpx'
+					<view style="margin-bottom:20rpx;padding-top:20rpx;">
+						<view class="u-flex  u-col-center u-row-left" style="margin-bottom:20rpx;">
+							<view class="u-flex-col u-row-center u-col-center" style="position:relative;top:-2px">
+								<u-image height="34rpx" width='34rpx'
 									:src="item.type == 1 ? '/static/image/oil-icon.png' : '/static/image/oil-icon1.png'" />
 								<!-- <view style="font-size: 10rpx; font-weight: bold; color: #000; margin-top: 4rpx;">{{item.type == 1 ? "中国石油" : "中国石化"}}	</view> -->
 							</view>
 							<text
-								style="font-weight: 600;font-size: 40rpx; color: #C57538; padding: 0 20rpx;">{{item.name}}</text>
+								style="font-weight: 600;font-size: 32rpx; color: #000000; padding: 0 16rpx;">{{item.name}}</text>
 						</view>
-						<view class="u-line-1 u-text-center" style="margin-top: 60rpx; font-size: 48rpx;font-weight: bold; color: #FEE0BF; 
-					text-shadow: 0rpx 4rpx 0rpx #B9570B, 0px 2rpx 0rpx #FAEAD9; letter-spacing: 3rpx;">
+						<view class="u-line-1 u-text-center" style=" font-size: 12px;font-weight: bold; color: #000000; letter-spacing: 3rpx;text-align:left;">
+							<text style="margin-right:8rpx;">
+								卡号：
+							</text>
 							<text v-for="(val, idx) in item.account" :key='idx' space="nbsp">
 								{{idx % 4 != 0 || idx == 0 ? val : '  ' + val }}
 							</text>
 							<!-- {{item.account}}</view> -->
 						</view>
 					</view>
+					
 				</swiper-item>
+				
 			</swiper>
+			<view class="add—card" @click="handleAddCard"></view>
+			</view>
 			<view class="oil-amount">
 				<!-- <view class="oil-amount-title">每月充值金额套餐</view> -->
 				<view class="oil-amount-content u-flex u-col-center u-row-between">
-					<view style="font-size: 28rpx; width: 210rpx; font-weight: bold;
-						 border-right: 2rpx solid #E3DEDE; margin-right: 68rpx;">
+					<view style="font-size: 24rpx;  font-weight: 400;
+						 margin-right:46rpx;color:#FFFFFF;">
 						每月加油金额</view>
-					<view class="u-flex u-flex-1 u-col-center" style="width: 150rpx;">
-						<view v-if="projectData.flag != 0" style="margin: 0 10rpx" @touchstart.stop.prevent="btnTouchStart('plus')"
-							@touchend.stop.prevent="clearTimer">
-							<u-image height="52rpx" width='52rpx' src="/static/image/add-icon.png"
-								:style="{filter: max && amount >= max ? 'grayscale(100%)':''}" />
-						</view>
-						<view class="u-flex-1 u-text-center" style="font-size: 32rpx;">{{amount}}</view>
+					<view class="u-flex u-col-center cacle-box" >
+						
 						<view v-if="projectData.flag != 0" style="margin: 0 10rpx" @touchstart.stop.prevent="btnTouchStart('minus')"
-							@touchend.stop.prevent="clearTimer">
-							<u-image height="52rpx" width='52rpx' src="/static/image/rdc-icon.png"
-								:style="{filter: amount<= min ? 'grayscale(100%)':''}" />
+							@touchend.stop.prevent="clearTimer" class="add-down"
+							:style="{opacity: amount<= min ? '.5':'1'}"
+							>
+							<!-- <u-image height="52rpx" width='52rpx' src="/static/image/rdc-icon.png"
+								:style="{filter: amount<= min ? 'grayscale(100%)':''}" /> -->
+						</view>
+						<view class=" u-text-center" style="font-size: 28rpx; padding:0 30rpx;color:#fff;">{{amount}}</view>
+						<view v-if="projectData.flag != 0" style="margin: 0 10rpx" @touchstart.stop.prevent="btnTouchStart('plus')"
+							class="add-plus"
+							@touchend.stop.prevent="clearTimer" :style="{opacity: max && amount >= max ? '.5':'1'}">
+							<!-- <u-image height="52rpx" width='52rpx' src="/static/image/add-icon.png"
+								:style="{filter: max && amount >= max ? 'grayscale(100%)':''}" /> -->
 						</view>
 					</view>
 				</view>
@@ -77,11 +87,16 @@
 				</view>
 				<view class="oil-list-wrap u-flex u-flex-wrap u-row-between">
 					<view
-						:class="['u-rela u-flex-col u-row-center u-col-center oil-item', projectData.id == item.id ? 'oil-item-active' : 'oil-item-inactive']"
+						:class="['u-rela u-flex-col  u-col-center oil-item', projectData.id == item.id ? 'oil-item-active' : 'oil-item-inactive']"
 						v-for="(item,index) in projectList" :key="index" @click="changeProject(item, index)">
-						<view class="oil-item-name">{{item.name}}</view>
+						
 						<view class="oil-item-month">{{item.month}}个月套餐</view>
-						<view class="u-absolute oil-item-flag">活动</view>
+						<view class="oil-item-name">{{item.discount*100/10}}<view class="oil-item-name-discount">
+							折
+						</view></view>
+						<view class="oil-item-name-tips">折合￥{{amount*item.discount}}元/月</view>
+						<view class="oil-item-name-bottom">最高可省{{item.save}}元</view>
+						<view class="u-absolute oil-item-flag" v-if="item.lable">{{showLabel(item.lable)}}</view>
 					</view>
 				</view>
 				</view>
@@ -106,7 +121,7 @@
 				</view>
 			</view>
 			</view>
-			<u-cell-group class="oil-cell-group" :border="false" v-if="fasle">
+			<u-cell-group class="oil-cell-group" :border="false" v-if="false">
 				<u-cell-item class="oil-cell-item" title="充值计划" value="查看计划" hover-class="none" bg-color="#fff"
 					:border-bottom="false" :value-style="{'color': '#333', 'fontSize': '24rpx'}"
 					:title-style="{'color': '#333', 'fontSize': '26rpx'}" @click="openPlan()">
@@ -206,6 +221,18 @@
 			this.getCardList()
 		},
 		methods: {
+			showLabel(value){
+				let obj ={
+					1:'新人',
+					 2:'秒杀',
+					  3:'热销',
+					   4:'限时'
+				}
+				return obj[value] || ""
+			},
+			handleAddCard(){
+				this.$emit('add-click')
+			},
 			getCardList() {
 				this.$u.api.getOilCardList().then(res => {
 					this.cardList = res.records || []
@@ -259,6 +286,12 @@
 						this.amount = Number(this.amount) + 100
 					}
 				}
+				this.caclePrice()
+			},
+			caclePrice(){
+				this.projectList.forEach((x)=>{
+					x.save = this.amount*x.month - (x.discount)*this.amount*x.month
+				})
 			},
 			minus() {
 				this.changeAmount(1);
@@ -379,6 +412,16 @@
 </script>
 
 <style lang="scss">
+	.add—card{
+		position:absolute;
+		right:0;
+		width:110rpx;
+		height:78rpx;
+		background:url('@/static/image/package/get.png') center center no-repeat;
+		background-size:100% 100%;
+		top:50%;
+		transform:translateY(-50%);
+	}
 	.swiper-item {
 		height: 100%;
 
@@ -386,10 +429,11 @@
 			// padding: 0 0 100rpx;
 
 			.oil-card {
+				position:relative;
 				height: 276rpx;
 				padding: 24rpx 24rpx 0;
 				background-color: #fff;
-
+				
 				.oil-card-wrap {
 					font-size: 36rpx;
 					color: #fff;
@@ -442,11 +486,20 @@
 				}
 
 				.oil-amount-content {
-					background-color: #FFF2F2;
-					border-radius: 12rpx;
-					padding: 24rpx 58rpx 22rpx 30rpx;
-					border-radius: 8rpx;
-					margin-top: 20rpx;
+					width:100%;
+					height:144rpx;
+					background:url('/static/image/package/banner.png') center center no-repeat;
+					background-size:100% 100%;
+					display:flex;
+					justify-content:flex-end;
+					align-items:center;
+					padding-top:24rpx;
+					margin-bottom:20rpx;
+					// background-color: #FFF2F2;
+					// border-radius: 12rpx;
+					// padding: 24rpx 58rpx 22rpx 30rpx;
+					// border-radius: 8rpx;
+					// margin-top: 20rpx;
 					color: #3A3A3A;
 				}
 			}
@@ -470,51 +523,98 @@
 					.oil-item {
 						// width: 220rpx;
 						// height: 164rpx;
+						padding-top:24rpx;
 						overflow: hidden;
-						width: 220rpx;
-						height: 152rpx;
+						width: 216rpx;
+						height: 230rpx;
 						text-align: center;
 						border-radius: 10rpx;
 						margin: 10rpx 0;
-
+						background:#fff;
+						.oil-item-name-bottom{
+							position: absolute;
+							left:0;
+							right:0;
+							display:flex;
+							justify-content:center;
+							align-items:center;
+							height: 42rpx;
+							background: #ECD7B3;
+							border-radius: 0px 0px 4px 4px;
+							bottom:0;
+							font-size: 10px;
+							font-weight: 500;
+							color: #704407;
+						}
 						.oil-item-name {
-							font-size: 40rpx;
 							font-weight: bold;
+							display:flex;
+							justify-content:center;
+							align-items:center;
+							font-size: 56rpx;
+							font-weight: bold;
+							color: #666666;
+							height:64rpx;
+							margin-bottom:4rpx;
+							.oil-item-name-discount{
+								position:relative;
+								top:2px;
+								font-size:28rpx;
+								left:2px;
+							}
 						}
 
 						.oil-item-month {
+							
 							font-size: 28rpx;
+							font-weight: 500;
+							color: #724107;
+							line-height: 40rpx;
+							margin-bottom:8rpx;
 						}
-
+						.oil-item-name-tips{
+							font-size: 10px;
+							font-weight: bold;
+							color: #C1C1C1;
+							line-height: 22rpx;
+						}
 						.oil-item-flag {
-							transform: rotate(45deg);
-							right: -40rpx;
-							top: 8rpx;
-							padding: 0 40rpx;
-							font-size: 20rpx;
+							width: 68rpx;
+							height: 28rpx;
+							background: linear-gradient(84deg, #FA6F32 0%, #FB5032 100%);
+							border-radius: 4px 0px 4px 0px;
+							font-size: 10px;
+							font-weight: 400;
+							color: #F8F8F8;
+							display:flex;
+							justify-content:center;
+							align-items:center;
+							left:0;
+							top:0;
 						}
 					}
 
 					.oil-item-active {
-						background: #FE4848;
+						background:url('/static/image/package/taocanbanner.png') center center no-repeat;
+						background-size:100% 100%;
 						border-radius: 10rpx;
-
+	
 						.oil-item-name {
-							color: #fff;
+							color: #744502;
 						}
 
 						.oil-item-month {
-							color: #fff;
+							color: #724107;
+						}
+						.oil-item-name-tips{
+							color:#C2A279;
 						}
 
-						.oil-item-flag {
-							background-color: #FDDCDC;
-							color: #F5504E;
-						}
+						
 					}
 
 					.oil-item-inactive {
-						box-shadow: 0px 4rpx 10rpx 0rpx rgba(206, 201, 201, 0.5);
+						//box-shadow: 0px 4rpx 10rpx 0rpx rgba(206, 201, 201, 0.5);
 
 						.oil-item-name {
 							color: #3A3A3A;
@@ -622,5 +722,58 @@
 									}
 			}
 		}
+	}
+	.cacle-box{
+		height:60rpx;
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 30rpx;
+		margin-right:20rpx;
+		.add-plus{
+			width:40rpx;
+			height:40rpx;
+			background:#fff;
+			border-radius:28rpx;
+			margin-left:22rpx;
+			position:relative;
+			&::after{
+				position:absolute;
+				content:'';
+				width:20rpx;
+				height:2px;
+				background:#5874FE;
+				top:50%;
+				left:50%;
+				transform:translate(-50% ,-50%);
+		}
+		&::before{
+			position:absolute;
+			content:'';
+			width:2px;
+			height:20rpx;
+			background:#5874FE;
+			top:50%;
+			left:50%;
+			transform:translate(-50% ,-50%);
+		}
+	}
+	.add-down{
+		width:40rpx;
+			height:40rpx;
+			background:#fff;
+			border-radius:28rpx;
+			margin-right:22rpx;
+			position:relative;
+			&::after{
+				position:absolute;
+				content:'';
+				width:20rpx;
+				height:2px;
+				background:#5874FE;
+				top:50%;
+				left:50%;
+				transform:translate(-50% ,-50%);
+		}
+	}
+	
 	}
 </style>
