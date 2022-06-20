@@ -94,7 +94,7 @@
 						<view class="oil-item-name">{{item.discount*100/10}}<view class="oil-item-name-discount">
 							折
 						</view></view>
-						<view class="oil-item-name-tips">折合￥{{amount*item.discount}}元/月</view>
+						<view class="oil-item-name-tips">折合￥{{showAmount(amount*item.discount)}}元/月</view>
 						<view class="oil-item-name-bottom">最高可省{{item.save}}元</view>
 						<view class="u-absolute oil-item-flag" v-if="item.lable">{{showLabel(item.lable)}}</view>
 					</view>
@@ -276,6 +276,11 @@
 					this.amount = Number(amount)
 				}, 200)
 			},
+			showAmount(value){
+				let result = value
+				result = result.toFixed(0)
+			  return result	
+			},
 			changeAmount(type = 1) {
 				if (type == 1) {
 					if (this.amount > this.min) {
@@ -290,7 +295,8 @@
 			},
 			caclePrice(){
 				this.projectList.forEach((x)=>{
-					x.save = this.amount*x.month - (x.discount)*this.amount*x.month
+					let result  = this.amount*x.month - (x.discount)*this.amount*x.month
+					x.save = result.toFixed(0)
 				})
 			},
 			minus() {
@@ -426,7 +432,7 @@
 		height: 100%;
 
 		.swiper-item-wrap {
-			// padding: 0 0 100rpx;
+			 padding: 0 0 100rpx;
 
 			.oil-card {
 				position:relative;
@@ -609,7 +615,15 @@
 						.oil-item-name-tips{
 							color:#C2A279;
 						}
-
+						.oil-list-wrap{
+							.oil-item{
+								.oil-item-name-bottom{
+									background:rgba(0,0,0,0);
+								}
+							}
+							
+						}
+						
 						
 					}
 
@@ -680,6 +694,7 @@
 		display:flex;
 		justify-content:space-between;
 		align-items: center;
+		margin-top:20rpx;
 		.item_box{
 			width:33.3%;
 			text-align:center;
