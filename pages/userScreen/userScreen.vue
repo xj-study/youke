@@ -40,7 +40,7 @@
 				<view class="bannder_item bannder_item1" @click="navigateTo('pages/helpScreen/helpScreen')">
 					
 					</view>
-				<view class="bannder_item bannder_item2" @click="handleLink(AboutUrl, '关于我们')"></view>
+				<view class="bannder_item bannder_item2" @click="navigateTo('pages/about/index')"></view>
 			</view>
 			<view class="add_box" @click="handleNav({ url: '/pages/oilCardCreate/oilCardCreate' })">
 				<view class="add_icon"></view>

@@ -322,6 +322,13 @@
 				"navigationBarTitleText": "附近加油站",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/about/index",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"subPackages": [],
