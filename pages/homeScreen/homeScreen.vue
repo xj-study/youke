@@ -1,18 +1,30 @@
 <template>
 	<view class="home-screen">
 		<view class="u-status-bar" :style="{ height: (vue_systemInfo.statusBarHeight || 0) + 'px' }"></view>
-		<u-swiper :list='bannerList' name='picUrl' :height="380" mode='none' interval='5000' :effect3d='true'
-			imgMode="widthFix" effect3d-previous-margin='32' bg-color='unset' border-radius='8' @click="handleBanner" />
-		<view style="margin: 20rpx 32rpx; border-radius: 8rpx;">
-			<view class="u-flex u-flex-wrap u-row-between" style="padding: 16rpx 0; border-bottom: solid 4rpx #F9F9F9;">
-				<view v-for="(item,index) in navList" :key="index" style="width: 25%; padding: 10rpx 0;"
+		<!-- home banner -->
+		<u-swiper :list='bannerList' name='picUrl' :height="310" mode='none' interval='5000' :effect3d='true'
+			imgMode="widthFix" effect3d-previous-margin='30' bg-color='unset' border-radius='16' @click="handleBanner" />
+		
+		<!-- sub ad list -->
+		<view v-if="subAdList.length > 0" class="u-flex" style="margin: 40rpx 30rpx; justify-content: space-between;">
+			<view v-for="(item, index) in subAdList" :key="index" @click="handleNav(item)">
+				<u-image height="180rpx" width='340rpx' :src="item.picUrl" mode="cover" style="border-radius: 16rpx; overflow: hidden;" />
+			</view>
+		</view>
+		
+		<!-- nav list -->
+		<view style="margin: 40rpx 30rpx;">
+			<view class="u-flex u-flex-wrap u-row-between">
+				<view v-for="(item,index) in navList" :key="index" style="width: 25%; margin-bottom: 20rpx;"
 					@click="handleNav(item)">
-					<u-image width="64rpx" height="64rpx" :src="item.image" style="margin: 12rpx auto" />
-					<view class="u-text-center u-line-1" style="color: #333; font-size: 24rpx;">{{item.title}}</view>
+					<u-image width="64rpx" height="64rpx" :src="item.image" style="margin: 0 auto" />
+					<view class="u-text-center u-line-1" style="margin-top:12rpx; color: #111727; font-size: 24rpx; line-height: 34rpx;">{{item.title}}</view>
 				</view>
 			</view>
 		</view>
-		<swiper v-if="vuex_token && cardList.length > 0" style="height: 276rpx; margin: 0 32rpx 16rpx; ">
+		
+		<!-- 油卡列表 -->
+		<!-- <swiper v-if="vuex_token && cardList.length > 0" style="height: 276rpx; margin: 0 32rpx 16rpx; ">
 			<swiper-item class="oil-card-wrap" v-for="(item, index) in cardList" :key="index">
 				<view style="height: 276rpx; background-image: url('/static/image/home-bg2.png');
 				background-size: 100% 100%; padding: 24rpx 32rpx;">
@@ -20,7 +32,6 @@
 						<view class="u-flex-col u-row-center u-col-center">
 							<u-image height="58rpx" width='58rpx'
 								:src="item.type == 1 ? '/static/image/oil-icon.png' : '/static/image/oil-icon1.png'" />
-							<!-- <view style="font-size: 10rpx; font-weight: bold; color: #000; margin-top: 4rpx;">{{item.type == 1 ? "中国石油" : "中国石化"}}	</view> -->
 						</view>
 						<text
 							style="font-weight: 600;font-size: 40rpx; color: #C57538; padding: 0 20rpx;">{{item.name}}</text>
@@ -30,12 +41,11 @@
 						<text v-for="(val, idx) in item.account" :key='idx' space="nbsp">
 							{{idx % 4 != 0 || idx == 0 ? val : '  ' + val }}
 						</text>
-						<!-- {{item.account}}</view> -->
 					</view>
 				</view>
 			</swiper-item>
-		</swiper>
-		<view v-else style="margin: 0 10rpx 16rpx; height: 320rpx; background-image: url('/static/image/oil-card-bg.png');
+		</swiper> -->
+		<!-- <view v-else style="margin: 0 10rpx 16rpx; height: 320rpx; background-image: url('/static/image/oil-card-bg.png');
 				background-size: 100% 100%;">
 			<view class="u-flex u-row-center u-col-center" style="height: 100%;"
 				@click="handleNav({url: !vuex_token ? 'pages/loginScreen/loginScreen' : '/pages/oilCardCreate/oilCardCreate'}) ">
@@ -45,9 +55,10 @@
 				</view>
 				<text style="color: #fff; margin: 0 16rpx; font-size: 36rpx;">添加油卡</text>
 			</view>
-		</view>
-		<!-- 热门套餐 -->
-		<view style="margin: 0 27rpx;">
+		</view> -->
+		
+		<!-- 优惠套餐 -->
+		<!-- <view style="margin: 0 27rpx;">
 			<view class="u-flex u-flex-wrap u-flex-1">
 				<view v-for="(item,index) in projectList" :key="index" @click="handleMeal(item)"
 					style="height: 166rpx; width: 33.3%; padding: 5rpx;">
@@ -70,7 +81,21 @@
 					</view>
 				</view>
 			</view>
+		</view> -->
+		
+		<!-- 优惠套餐 -->
+		<view class="cell-x">
+			<view class="cell-header">优惠套餐</view>
+			<view class="cell-list" style="padding: 0 12rpx 40rpx;">
+				<view class="cell-i-project" v-for="(item,index) in projectList" :key="index" @click="handleMeal(item)">
+					<view class="hs-name">{{ item.name }}</view>
+					<view class="hs-amount">{{ item.defaultAmount }}</view>
+					<view class="hs-month">{{ item.month }}个月套餐</view>
+					<view class="hs-save">优惠¥{{ item.save }}元</view>
+				</view>
+			</view>
 		</view>
+		
 		<!-- 限时秒杀-->
 		<view style="margin: 20rpx 32rpx;" v-if="miaoshaObj.id && miaoshaObj.remainSeconds > 0">
 			<view style="padding: 38rpx 44rpx; background-color: #D6CEFF;">
@@ -339,7 +364,7 @@
 			getProject: function() {
 				this.$u.api.getProjectList({
 					pageNum: 1,
-					pageSize: 3
+					pageSize: 100
 				}).then(res => {
 					uni.stopPullDownRefresh()
 					// console.log('getProjectList', res)
@@ -475,6 +500,7 @@
 		position: relative;
 		z-index: 2;
 		padding: 20rpx 0 0;
+		background-color: #f5f5f5;
 
 		.bg-img {
 			position: absolute;
@@ -503,5 +529,96 @@
 				background: linear-gradient(311deg, #F4C586 0%, #CE4A10 100%);
 			}
 		}
+	}
+</style>
+
+<style>
+	.cell-x {
+		margin: 0 30rpx 20rpx;
+		border-radius: 16rpx;
+		background-color: #ffffff;
+	}
+	.cell-header {
+		padding: 24rpx 28rpx 30rpx;
+		line-height: 44rpx;
+		font-size: 32rpx;
+		font-weight: Medium;
+		font-family: PingFangSC-Medium, PingFang SC;;
+	}
+	.cell-list {
+		display: flex;
+		overflow-x: auto;
+	}
+	.cell-i-project {
+		position: relative;
+		
+		flex-shrink: 0;
+		width: 164rpx;
+		height: 200rpx;
+		background-image: url('/static/image/home-bg-project.png');
+		background-size: 100%;
+		
+		padding: 20rpx 0;
+		text-align: center;
+		color: #FE6719;
+	}
+	.cell-i-project + .cell-i-project {
+		margin-left: 20rpx;
+	}
+	
+	.hs-name {
+		font-size: 22rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #111727;
+		line-height: 32rpx;
+	}
+	.hs-amount {
+		font-size: 44rpx;
+		font-family: DINAlternate-Bold, DINAlternate;
+		font-weight: bold;
+		line-height: 52rpx;
+	}
+	.hs-amount::before {
+		content: '¥';
+		
+		padding-right: 4rpx;
+		vertical-align: 4rpx;
+		
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		color: #FE6719;
+		font-weight: 500;
+		line-height: 34rpx;
+	}
+	.hs-amount::after {
+		content: '/月';
+		
+		padding-left: 4rpx;
+		vertical-align: 4rpx;
+		
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 34rpx;
+	}
+	.hs-month {
+		margin-top: 4rpx;
+		
+		font-size: 20rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #111727;
+		line-height: 28rpx;
+	}
+	.hs-save {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 10rpx;
+		font-size: 20rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 28rpx;
 	}
 </style>
