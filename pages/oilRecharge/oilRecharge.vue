@@ -1,19 +1,23 @@
 <template>
 	<view class="oil-recharge-screen">
-		<view class="oil-recharge-wrap" :style="{paddingTop: (vue_systemInfo.statusBarHeight || 0) + 'px'}">
-			<view class="tab-wrap u-flex u-row-center u-col-center">
-				<u-tabs-swiper ref="uTabs" :list="tabs" :current="current" @change="tabsChange" :is-scroll="false"
-					swiperWidth="375" height="88" font-size="30" active-color="#333" inactive-color="#707070"
-					bar-width="32" bar-height="6" :bar-style="{'background': '#FE4848', 'bottom': '8rpx'}"
-					style="width: 50%" />
-				<u-icon @click="goBack()" class="left" name="arrow-left" size="40" color="#333"></u-icon>
-				<view v-if="current==0" class="right" @click="receiveCard()">领取油卡</view>
+		<view class="oil-recharge-wrap">
+			<view :style="{paddingTop: (vue_systemInfo.statusBarHeight || 0) + 'px'}" class="shadow-box">
+				<view class="tab-wrap u-flex u-row-center u-col-center">
+					<u-tabs-swiper 
+					ref="uTabs" :list="tabs" :current="current" @change="tabsChange" :is-scroll="false"
+						bg-color='rgba(0,0,0,0)'
+						swiperWidth="375" height="88" font-size="30" active-color="#333" inactive-color="#707070"
+						bar-width="32" bar-height="6" :bar-style="{'background': '#5874FE', 'bottom': '8rpx'}"
+						style="width: 50%" />
+					<u-icon @click="goBack()" class="left" name="arrow-left" size="40" color="#333"></u-icon>
+					<!-- <view v-if="current==0" class="right" @click="receiveCard()">领取油卡</view> -->
+				</view>
 			</view>
 			<swiper class="swiper-wrap" :current="swiperCurrent" @transition="transition"
 				@animationfinish="animationfinish">
 				<swiper-item>
 					<oil-recharge-m ref="uSwiper0" :projectData='projectData' @changeProject="changeProject"
-						@resetCoupon="resetCoupon" />
+						@resetCoupon="resetCoupon"  @add-click='receiveCard()'/>
 				</swiper-item>
 				<swiper-item>
 					<oil-recharge-d ref="uSwiper1" :projectData='projectData1' @changeProject="changeProject1"
@@ -194,7 +198,6 @@
 			height: 100%;
 
 			.tab-wrap {
-				background-color: #fff;
 				position: relative;
 
 				.left {
@@ -220,4 +223,10 @@
 			}
 		}
 	}
+	.shadow-box{
+		width:100%;
+		background: linear-gradient(180deg, #E0E5FF 0%, #FFFFFF 100%);
+		opacity: 0.87;
+	}
+	
 </style>
