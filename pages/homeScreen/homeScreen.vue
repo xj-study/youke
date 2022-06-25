@@ -170,7 +170,12 @@
 			</view>
 		</view> -->
 		
-		<!--  -->
+		<!-- 活动位 -->
+		<view v-if="subAdList.length > 0" class="cell-y">
+			<view v-for="(item, index) in subAdList" :class="'hs-ad hs-ad-' + index" :key="index" @click="handleNav(item)">
+				<u-image width="100%" height="100%" :src="item.picUrl" mode="aspectFill" />
+			</view>
+		</view>
 		
 		<!-- 精选商品 -->
 		<view v-if="goodsList.length" class="cell-x">
@@ -792,5 +797,35 @@
 		
 		font-size: 28rpx;
 		color: #FD843A;
+	}
+	
+	.cell-y {
+		position: relative;
+		margin: 0 30rpx 20rpx;
+		border-radius: 16rpx;
+		font-size: 0;
+		min-height: 470rpx;
+	}
+	.hs-ad {
+		display: inline-block;
+		width: 335rpx;
+		overflow: hidden;
+	}
+	.hs-ad.hs-ad-0 {
+		position: absolute;
+		height: 470rpx;
+		border-radius: 8rpx;
+	}
+	.hs-ad.hs-ad-1, .hs-ad.hs-ad-2 {
+		margin-left: 350rpx;
+		height: 226rpx;
+		margin-bottom: 20rpx;
+	}
+	.hs-ad.hs-ad-3, .hs-ad.hs-ad-4 {
+		height: 172rpx;
+		border-radius: 16rpx;
+	}
+	.hs-ad.hs-ad-4 {
+		margin-left: 20rpx;
 	}
 </style>
