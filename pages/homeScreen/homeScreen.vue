@@ -1,5 +1,6 @@
 <template>
 	<view class="home-screen">
+		<view class="bg-img"></view>
 		<view class="u-status-bar" :style="{ height: (vue_systemInfo.statusBarHeight || 0) + 'px' }"></view>
 		<!-- home banner -->
 		<u-swiper :list='bannerList' name='picUrl' :height="310" mode='none' interval='5000' :effect3d='true'
@@ -534,8 +535,10 @@
 			left: 0;
 			right: 0;
 			z-index: -1;
-			height: 438rpx;
-			background: linear-gradient(180deg, #F09842 0%, #F09842 31%, rgba(240, 152, 66, 0) 100%);
+			height: 588rpx;
+			background-image: url('/static/image/home-bg-banner.png');
+			background-size: 100% 100%;
+			// background: linear-gradient(180deg, #F09842 0%, #F09842 31%, rgba(240, 152, 66, 0) 100%);
 		}
 
 		.gradient1 {
