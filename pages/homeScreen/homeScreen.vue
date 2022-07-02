@@ -1,18 +1,31 @@
 <template>
 	<view class="home-screen">
+		<view class="bg-img"></view>
 		<view class="u-status-bar" :style="{ height: (vue_systemInfo.statusBarHeight || 0) + 'px' }"></view>
-		<u-swiper :list='bannerList' name='picUrl' :height="380" mode='none' interval='5000' :effect3d='true'
-			imgMode="widthFix" effect3d-previous-margin='32' bg-color='unset' border-radius='8' @click="handleBanner" />
-		<view style="margin: 20rpx 32rpx; border-radius: 8rpx;">
-			<view class="u-flex u-flex-wrap u-row-between" style="padding: 16rpx 0; border-bottom: solid 4rpx #F9F9F9;">
-				<view v-for="(item,index) in navList" :key="index" style="width: 25%; padding: 10rpx 0;"
+		<!-- home banner -->
+		<u-swiper :list='bannerList' name='picUrl' :height="310" mode='none' interval='5000' :effect3d='true'
+			imgMode="widthFix" effect3d-previous-margin='30' bg-color='unset' border-radius='16' @click="handleBanner" />
+		
+		<!-- ad list -->
+		<view v-if="adList.length > 0" class="u-flex" style="margin: 40rpx 30rpx; justify-content: space-between;">
+			<view v-for="(item, index) in adList" :key="index" @click="handleNav(item)">
+				<u-image height="180rpx" width='340rpx' :src="item.picUrl" mode="cover" style="border-radius: 16rpx; overflow: hidden;" />
+			</view>
+		</view>
+		
+		<!-- nav list -->
+		<view style="margin: 40rpx 30rpx;">
+			<view class="u-flex u-flex-wrap u-row-between">
+				<view v-for="(item,index) in navList" :key="index" style="width: 25%; margin-bottom: 20rpx;"
 					@click="handleNav(item)">
-					<u-image width="64rpx" height="64rpx" :src="item.image" style="margin: 12rpx auto" />
-					<view class="u-text-center u-line-1" style="color: #333; font-size: 24rpx;">{{item.title}}</view>
+					<u-image width="64rpx" height="64rpx" :src="item.image" style="margin: 0 auto" />
+					<view class="u-text-center u-line-1" style="margin-top:12rpx; color: #111727; font-size: 24rpx; line-height: 34rpx;">{{item.title}}</view>
 				</view>
 			</view>
 		</view>
-		<swiper v-if="vuex_token && cardList.length > 0" style="height: 276rpx; margin: 0 32rpx 16rpx; ">
+		
+		<!-- 油卡列表 -->
+		<!-- <swiper v-if="vuex_token && cardList.length > 0" style="height: 276rpx; margin: 0 32rpx 16rpx; ">
 			<swiper-item class="oil-card-wrap" v-for="(item, index) in cardList" :key="index">
 				<view style="height: 276rpx; background-image: url('/static/image/home-bg2.png');
 				background-size: 100% 100%; padding: 24rpx 32rpx;">
@@ -20,7 +33,6 @@
 						<view class="u-flex-col u-row-center u-col-center">
 							<u-image height="58rpx" width='58rpx'
 								:src="item.type == 1 ? '/static/image/oil-icon.png' : '/static/image/oil-icon1.png'" />
-							<!-- <view style="font-size: 10rpx; font-weight: bold; color: #000; margin-top: 4rpx;">{{item.type == 1 ? "中国石油" : "中国石化"}}	</view> -->
 						</view>
 						<text
 							style="font-weight: 600;font-size: 40rpx; color: #C57538; padding: 0 20rpx;">{{item.name}}</text>
@@ -30,12 +42,11 @@
 						<text v-for="(val, idx) in item.account" :key='idx' space="nbsp">
 							{{idx % 4 != 0 || idx == 0 ? val : '  ' + val }}
 						</text>
-						<!-- {{item.account}}</view> -->
 					</view>
 				</view>
 			</swiper-item>
-		</swiper>
-		<view v-else style="margin: 0 10rpx 16rpx; height: 320rpx; background-image: url('/static/image/oil-card-bg.png');
+		</swiper> -->
+		<!-- <view v-else style="margin: 0 10rpx 16rpx; height: 320rpx; background-image: url('/static/image/oil-card-bg.png');
 				background-size: 100% 100%;">
 			<view class="u-flex u-row-center u-col-center" style="height: 100%;"
 				@click="handleNav({url: !vuex_token ? 'pages/loginScreen/loginScreen' : '/pages/oilCardCreate/oilCardCreate'}) ">
@@ -45,34 +56,38 @@
 				</view>
 				<text style="color: #fff; margin: 0 16rpx; font-size: 36rpx;">添加油卡</text>
 			</view>
-		</view>
-		<!-- 热门套餐 -->
-		<view style="margin: 0 27rpx;">
-			<view class="u-flex u-flex-wrap u-flex-1">
-				<view v-for="(item,index) in projectList" :key="index" @click="handleMeal(item)"
-					style="height: 166rpx; width: 33.3%; padding: 5rpx;">
-					<view class="u-flex-col" style="width: 100%; height: 100%; position: relative; overflow: hidden;
-					background-image: url('/static/image/home-bg1.png');background-size: 100% 100%">
-						<view class="u-absolute" style="color: #fff; background-color: #F04B22; font-size: 18rpx;
-						right: -42rpx; top: 12rpx; padding: 0 40rpx; transform: rotate(45deg);"> {{item.name}} </view>
-						<view class="u-flex u-col-center u-row-center" style="padding: 6rpx; color: #CB834D;
-						font-size: 24rpx">{{item.month}}个月</view>
-						<view class="u-flex u-col-center u-row-center" style="margin-top: -10rpx;">
-							<text style="font-size: 28rpx; color: #F04B22; margin-top: 8rpx;">¥</text>
-							<text
-								style="font-size: 48rpx; color: #F04B22; font-weight: 600;">{{ item.defaultAmount }}</text>
-							<text style="font-size: 24rpx; color: #CB834D; margin-top: 8rpx;">/月</text>
-						</view>
-						<view class="u-flex-col u-col-center u-row-center u-line-1" style="color: #C57538;
-						 font-size: 24rpx; margin-top: 12rpx">
-							立省{{item.save}}元
-						</view>
-					</view>
+		</view> -->
+		
+		<!-- 优惠套餐 -->
+		<view v-if="projectList.length" class="cell-x">
+			<view class="cell-header">
+				<text>优惠套餐</text>
+				<text class="cell-header-more" @click="handleMeal({ mode: 1 })">查看全部</text>
+			</view>
+			<view class="cell-list" style="padding: 0 12rpx 40rpx;">
+				<view class="cell-i-project" v-for="(item,index) in projectList" :key="index" @click="handleMeal(item)">
+					<view class="hs-name">{{ item.name }}</view>
+					<view class="hs-amount">{{ item.defaultAmount }}</view>
+					<view class="hs-month">{{ item.month }}个月套餐</view>
+					<view class="hs-save">优惠¥{{ item.save }}元</view>
 				</view>
 			</view>
 		</view>
+		
+		<!-- 每日特价 -->
+		<view class="cell-label">
+			 <view class="label-x" v-for="(item, index) in labelList" :key="index" @click="handleMeal(item)">
+				 <view class="hsl-tag-x"><text class="hsl-tag">{{ item.lable | ftag }}</text></view>
+				 <view class="hsl-name">{{ item.name }}</view>
+				 <view class="hsl-sale">{{ item.saleAmount }}</view>
+				 <view class="hsl-info">{{ item.month }}个月套餐 {{ item.defaultAmount }}/月</view>
+				 <view class="hsl-total">原价{{ item.saleAmount + item.save }}元</view>
+				 <view class="hsl-btn">立即秒杀</view>
+			 </view>
+		</view>
+		
 		<!-- 限时秒杀-->
-		<view style="margin: 20rpx 32rpx;" v-if="miaoshaObj.id && miaoshaObj.remainSeconds > 0">
+		<!-- <view style="margin: 20rpx 32rpx;" v-if="miaoshaObj.id && miaoshaObj.remainSeconds > 0">
 			<view style="padding: 38rpx 44rpx; background-color: #D6CEFF;">
 				<view class="u-flex u-row-between">
 					<u-image height="36rpx" width='182rpx' src="/static/image/ms-icon.png" />
@@ -101,23 +116,23 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!--  -->
-		<view v-if="adList.length > 0" style="margin: 20rpx 0;">
+		<!-- <view v-if="adList.length > 0" style="margin: 20rpx 0;">
 			<u-swiper :list='adList' name='picUrl' :height="206" mode='none' interval='5000' :effect3d='true'
 				effect3d-previous-margin='32' bg-color='#F8F8F8' border-radius='8' @click="handleAd" />
-		</view>
+		</view> -->
 
-		<view v-if="subAdList.length > 0" class="u-flex" style="margin: 0 24rpx 20rpx; justify-content: space-between;">
+		<!-- <view v-if="subAdList.length > 0" class="u-flex" style="margin: 0 24rpx 20rpx; justify-content: space-between;">
 			<view v-for="(item, index) in subAdList" :key="index" @click="handleNav(item)">
 				<u-image height="330rpx" width='330rpx' :src="item.picUrl" />
 			</view>
-		</view>
+		</view> -->
 		<!-- 	<view class="">
 			location_per: {{location_per}}
 		</view> -->
 		<!-- 附近加油站 -->
-		<view style="margin: 40rpx 0 0">
+		<!-- <view style="margin: 40rpx 0 0">
 			<u-section :show-line='false' title="加油站导航" color="#000" :bold='true' font-size='38' sub-color="#666"
 				style="padding: 0 32rpx;">
 				<view slot="right">附近有{{stations.length}}个加油站
@@ -154,6 +169,28 @@
 					</view>
 				</view>
 			</view>
+		</view> -->
+		
+		<!-- 活动位 -->
+		<view v-if="subAdList.length > 0" class="cell-y">
+			<view v-for="(item, index) in subAdList" :class="'hs-ad hs-ad-' + index" :key="index" @click="handleNav(item)">
+				<u-image width="100%" height="100%" :src="item.picUrl" mode="aspectFill" />
+			</view>
+		</view>
+		
+		<!-- 精选商品 -->
+		<view v-if="goodsList.length" class="cell-x">
+			<view class="cell-header">
+				<text>精选商品</text>
+				<text class="cell-header-more" @click="handleGoodsMore">查看全部</text>
+			</view>
+			<view class="cell-list" style="padding: 0 40rpx 20rpx;">
+				<view class="cell-i-goods" v-for="(item,index) in goodsList" :key="index" @click="handleGoods(item)">
+					<u-image width="100%" height="180rpx" :src="item.picUrl"></u-image>
+					<view class="hs-gname u-line-1">{{ item.name }}</view>
+					<view class="hs-gamount">{{ item.price }}</view>
+				</view>
+			</view>
 		</view>
 
 		<!-- 广告弹窗 -->
@@ -185,6 +222,14 @@
 	import {
 		mapState
 	} from 'vuex';
+	
+	const labelMap = {
+		1: '新人推荐',
+		2: '特价秒杀',
+		3: '热销推荐',
+		4: '限时秒杀',
+	}
+	
 	export default {
 		data() {
 			return {
@@ -199,21 +244,22 @@
 				popList: [],
 				adShow: false,
 				// noticeList: [],
-				miaoshaObj: {},
-				labelMap: {
-					1: '新人推荐',
-					2: '特价秒杀',
-					3: '热销推荐',
-				},
+				labelList: [],
+				
 				// newData: {},
 				projectList: [],
-				// goodsList: [],
+				goodsList: [],
 				cardList: [],
 				subAdList: []
 			};
 		},
 		computed: {
 			...mapState(['vuex_token', 'location_per', 'notify'])
+		},
+		filters: {
+			ftag(val) {
+				return labelMap[val]
+			}
 		},
 		onLoad() {
 			// #ifdef APP-PLUS
@@ -236,18 +282,7 @@
 			this.getBanner('HOME_POPUP', 'popList')
 		},
 		onPullDownRefresh() {
-			this.getBanner('HOME_BANNER', 'bannerList')
-			this.getBanner('HOME_VICE_BANNER', 'adList')
-			this.getBanner('FOOTER_AD', 'subAdList')
-			this.getNavList()
-			this.getSale()
-			this.getProject()
-			if (this.vuex_token) {
-				this.getCardList()
-			}
-			if (this.location_per) {
-				this.getLocation();
-			}
+			this.queryData()
 		},
 		onShow() {
 			// #ifdef APP-PLUS  
@@ -255,23 +290,30 @@
 				plus.navigator.setStatusBarStyle('dark');
 			}, 200)
 			// #endif
-			this.getBanner('HOME_BANNER', 'bannerList')
-			this.getBanner('HOME_VICE_BANNER', 'adList')
-			this.getBanner('FOOTER_AD', 'subAdList')
-			this.getNavList()
-			this.getSale()
-			this.getProject()
+			this.queryData()
 			// this.getNew()
 			// this.getGoods()
 			// this.getStation();
-			if (this.vuex_token) {
-				this.getCardList()
-			}
-			if (this.location_per) {
-				this.getLocation();
-			}
 		},
 		methods: {
+			// 请求数据
+			queryData(){
+				this.getBanner('HOME_BANNER', 'bannerList')
+				this.getBanner('HOME_VICE_BANNER', 'adList')
+				this.getBanner('FOOTER_AD', 'subAdList')
+				this.getNavList()
+				this.getProjectLable()
+				this.getProject()
+				this.getRecommenGoods()
+				
+				if (this.vuex_token) {
+					this.getCardList()
+				}
+				if (this.location_per) {
+					this.getLocation();
+				}
+			},
+			
 			getLocation() {
 				const that = this;
 				uni.getLocation({
@@ -316,14 +358,13 @@
 					console.log('err', err)
 				})
 			},
-			getSale: function() {
-				this.$u.api.getMiaosha({
-					// pageNum: 1,
-					// pageSize: 2,
-					label: 4
+			getProjectLable: function() {
+				this.$u.api.getLableList({
+					pageNum: 1,
+					pageSize: 2,
 				}).then(res => {
-					// console.log('getLableList', res)
-					this.miaoshaObj = res || {}
+					console.log('getLableList', res)
+					this.labelList = res.records || []
 				}).catch(err => {
 					console.log('err', err)
 				})
@@ -339,7 +380,7 @@
 			getProject: function() {
 				this.$u.api.getProjectList({
 					pageNum: 1,
-					pageSize: 3
+					pageSize: 100
 				}).then(res => {
 					uni.stopPullDownRefresh()
 					// console.log('getProjectList', res)
@@ -349,16 +390,13 @@
 					console.log('err', err)
 				})
 			},
-			// getGoods: function() {
-			// 	this.$u.api.getGoodsList({
-			// 		pageNum: 1,
-			// 		pageSize: 3
-			// 	}).then(res => {
-			// 		this.goodsList = res.records || []
-			// 	}).catch(err => {
-			// 		console.log('err', err)
-			// 	})
-			// },
+			getRecommenGoods: function() {
+				this.$u.api.getRecommendGoodsList().then(res => {
+					this.goodsList = res || []
+				}).catch(err => {
+					console.log('err', err)
+				})
+			},
 			getStation() {
 				this.$u.api.getGasStation({
 					lat: this.latitude,
@@ -446,6 +484,20 @@
 					params: item
 				})
 			},
+			
+			handleGoodsMore() {
+				this.$u.route({
+					url: 'pages/mallScreen/mallScreen'
+				})
+			},
+			
+			handleGoods(item) {
+				this.$u.route({
+					url: 'pages/goodsDetail/goodsDetail',
+					params: { id: item.id }
+				})
+			},
+			
 			handleStation(item) {
 				// console.log(item)
 				// #ifdef APP-PLUS
@@ -462,10 +514,10 @@
 				})
 				// #endif
 			},
-			miaoshaEnd() {
-				this.miaoshaObj = {};
-				this.$refs.miaosha.clearTimer();
-			}
+			// miaoshaEnd() {
+			// 	this.miaoshaObj = {};
+			// 	this.$refs.miaosha.clearTimer();
+			// }
 		}
 	}
 </script>
@@ -475,6 +527,7 @@
 		position: relative;
 		z-index: 2;
 		padding: 20rpx 0 0;
+		background-color: #f5f5f5;
 
 		.bg-img {
 			position: absolute;
@@ -482,8 +535,10 @@
 			left: 0;
 			right: 0;
 			z-index: -1;
-			height: 438rpx;
-			background: linear-gradient(180deg, #F09842 0%, #F09842 31%, rgba(240, 152, 66, 0) 100%);
+			height: 588rpx;
+			background-image: url('/static/image/home-bg-banner.png');
+			background-size: 100% 100%;
+			// background: linear-gradient(180deg, #F09842 0%, #F09842 31%, rgba(240, 152, 66, 0) 100%);
 		}
 
 		.gradient1 {
@@ -503,5 +558,277 @@
 				background: linear-gradient(311deg, #F4C586 0%, #CE4A10 100%);
 			}
 		}
+	}
+</style>
+
+<style>
+	.cell-x {
+		margin: 0 30rpx 20rpx;
+		border-radius: 16rpx;
+		background-color: #ffffff;
+	}
+	.cell-header {
+		position: relative;
+		
+		padding: 24rpx 28rpx 30rpx;
+		line-height: 44rpx;
+		font-size: 32rpx;
+		font-weight: Medium;
+		font-family: PingFangSC-Medium, PingFang SC;;
+	}
+	.cell-header-more {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 30rpx 12rpx;
+		
+		font-size: 20rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #2F3032;
+		line-height: 28rpx;
+	}
+	.cell-list {
+		display: flex;
+		overflow-x: auto;
+	}
+	.cell-i-project {
+		position: relative;
+		
+		flex-shrink: 0;
+		width: 164rpx;
+		height: 200rpx;
+		background-image: url('/static/image/home-bg-project.png');
+		background-size: 100%;
+		
+		padding: 20rpx 0;
+		text-align: center;
+		color: #FE6719;
+	}
+	.cell-i-project + .cell-i-project {
+		margin-left: 20rpx;
+	}
+	
+	.hs-name {
+		font-size: 22rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #111727;
+		line-height: 32rpx;
+	}
+	.hs-amount {
+		font-size: 44rpx;
+		font-family: DINAlternate-Bold, DINAlternate;
+		font-weight: bold;
+		line-height: 52rpx;
+	}
+	.hs-amount::before {
+		content: '¥';
+		
+		padding-right: 4rpx;
+		vertical-align: 4rpx;
+		
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		color: #FE6719;
+		font-weight: 500;
+		line-height: 34rpx;
+	}
+	.hs-amount::after {
+		content: '/月';
+		
+		padding-left: 4rpx;
+		vertical-align: 4rpx;
+		
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 34rpx;
+	}
+	.hs-month {
+		margin-top: 4rpx;
+		
+		font-size: 20rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #111727;
+		line-height: 28rpx;
+	}
+	.hs-save {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 10rpx;
+		font-size: 20rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 28rpx;
+	}
+	
+	
+	.cell-i-goods {
+		width: 180rpx;
+		text-align: center;
+	}
+	.cell-i-goods + .cell-i-goods {
+		margin-left: 36rpx;
+	}
+	
+	.hs-gname {
+		margin-top: 4rpx;
+		font-size: 24rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #111727;
+		line-height: 34rpx;
+	}
+	.hs-gamount {
+		margin-top: 4rpx;
+		font-size: 32rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #EC4848;
+		line-height: 44rpx;
+	}
+	.hs-gamount::before {
+		content: '¥';
+		
+		padding-right: 8rpx;
+		/* vertical-align: 4rpx; */
+		
+		font-size: 24rpx;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 34rpx;
+	}
+	
+	.cell-label {
+		margin: 20rpx 30rpx;
+		
+		display: flex;
+		justify-content: space-between;
+		
+		text-align: center;
+	}
+	.label-x {	
+		position: relative;
+		width: 334rpx;
+		height: 382rpx;
+		
+		background-image: url('/static/image/home-bg-label.png');
+		background-size: 100%;
+		background-color: transparent;
+		
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+	}
+	.hsl-tag-x {
+		position: absolute;
+		
+		padding: 6rpx 20rpx;
+		border-radius: 16rpx 19rpx 19rpx 0rpx;
+		background: #FEF2EB;
+	}
+	.hsl-tag-x {
+		font-size: 20rpx;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FF8530;
+		line-height: 28rpx;
+	}
+	.hsl-name {
+		position: absolute;
+		top: 12rpx;
+		right: 26rpx;
+		
+		font-size: 24rpx;
+		color: #111727;
+		line-height: 34rpx;
+	}
+	.hsl-sale {
+		padding-top: 80rpx;
+		
+		font-size: 60rpx;
+		font-family: DINAlternate-Bold, DINAlternate;
+		font-weight: bold;
+		color: #FE6719;
+		line-height: 70rpx;
+	}
+	.hsl-sale::after {
+		content: '元';
+		
+		padding-left: 8rpx;
+		vertical-align: 4rpx;
+		
+		font-size: 36rpx;
+		font-family: PingFangSC-Semibold, PingFang SC;
+		font-weight: 600;
+		line-height: 50rpx;
+	}
+	.hsl-info {
+		margin-top: 20rpx;
+		
+		font-size: 28rpx;
+		color: #111727;
+		line-height: 40rpx;
+	}
+	.hsl-total {
+		margin-top: 16rpx;
+		
+		font-size: 24rpx;
+		color: #9FA5AC;
+		line-height: 34rpx;
+		
+		text-decoration: line-through;
+	}
+	.hsl-btn {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 22rpx;
+		
+		width: 160rpx;
+		height: 56rpx;
+		margin: auto;
+		
+		line-height: 56rpx;
+		background: rgba(253, 132, 58, 0.1);
+		border-radius: 28rpx;
+		
+		text-align: center;
+		
+		
+		font-size: 28rpx;
+		color: #FD843A;
+	}
+	
+	.cell-y {
+		position: relative;
+		margin: 0 30rpx 20rpx;
+		border-radius: 16rpx;
+		font-size: 0;
+		min-height: 470rpx;
+	}
+	.hs-ad {
+		display: inline-block;
+		width: 335rpx;
+		overflow: hidden;
+	}
+	.hs-ad.hs-ad-0 {
+		position: absolute;
+		height: 470rpx;
+		border-radius: 8rpx;
+	}
+	.hs-ad.hs-ad-1, .hs-ad.hs-ad-2 {
+		margin-left: 350rpx;
+		height: 226rpx;
+		margin-bottom: 20rpx;
+	}
+	.hs-ad.hs-ad-3, .hs-ad.hs-ad-4 {
+		height: 172rpx;
+		border-radius: 16rpx;
+	}
+	.hs-ad.hs-ad-4 {
+		margin-left: 20rpx;
 	}
 </style>

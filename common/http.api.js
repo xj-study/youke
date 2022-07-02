@@ -48,6 +48,10 @@ const install = (Vue, vm) => {
 	const getPlanList = (params = {}) => {
 		return vm.$u.get(`${baseUrl}/plan/list`, params);
 	}
+	// 获取首页推荐商品列表
+	const getRecommendGoodsList = (params = {}) => {
+		return vm.$u.get(`${baseUrl}/goods/recommend`, params);
+	}
 	// 获取商品列表
 	const getGoodsList = (params = {}) => {
 		return vm.$u.get(`${baseUrl}/goods/page`, params);
@@ -189,6 +193,7 @@ const install = (Vue, vm) => {
 		getGasStation,
 		getOilOrderPlace,
 		getPlanList,
+		getRecommendGoodsList,
 		getGoodsList,
 		getGoodsCategory,
 		getGoodsDetail,
